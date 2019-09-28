@@ -1,12 +1,16 @@
 const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
-const API = 'https://rickandmortyapi.com/api/character/';
-
+let API = 'https://rickandmortyapi.com/api/character/';
+let API2 = 'https://us-central1-escuelajs-api.cloudfunctions.net/characters'
+let next;
 const getData = api => {
   fetch(api)
-    .then(response => response.json())
+    .then(response => {response.json()
+    })
     .then(response => {
       const characters = response.results;
+      next = response.info.next;
+      console.log(next);
       let output = characters.map(character => {
         return `
       <article class="Card">
@@ -23,8 +27,14 @@ const getData = api => {
     .catch(error => console.log(error));
 }
 
+const next_fetch = () => {
+  API = next;
+  // console.log(next);
+}
+
 const loadData = () => {
-  getData(API);
+  getData(API2);
+  nextPage();
 }
 
 const intersectionObserver = new IntersectionObserver(entries => {
