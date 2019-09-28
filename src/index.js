@@ -33,7 +33,7 @@ const next_fetch = () => {
 }
 
 const loadData = () => {
-  getData(API2);
+  getData(API);
   nextPage();
 }
 
