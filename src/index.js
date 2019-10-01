@@ -1,6 +1,6 @@
 const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
-let dataStorage;
+let promesa;
 let API = 'https://rickandmortyapi.com/api/character/';
 
 const getData = api => {
@@ -26,17 +26,17 @@ const getData = api => {
     .catch(error => console.log(error));
 }
 const next_url = () => {
-  API = dataStorage;
+  API = promesa;
   //return API;
 }
 const loadData = () => {
   let nextPage;
   let verificator;
-  dataStorage = new Promise( function(resolve, reject) {
+  promesa = new Promise( function(resolve, reject) {
     nextPage = localStorage.getItem('next_fetch');
     resolve(nextPage);
   });
-  dataStorage.then(
+  promesa.then(
     verificator => console.log(verificator ? verificator : API)   
   )
   getData(API);
