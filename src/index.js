@@ -1,6 +1,7 @@
 const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
 let promesa;
+let nextPage;
 let API = 'https://rickandmortyapi.com/api/character/';
 
 const getData = api => {
@@ -22,23 +23,24 @@ const getData = api => {
       newItem.classList.add('Items');
       newItem.innerHTML = output;
       $app.appendChild(newItem);
-    })
+    }).then(next_url())
     .catch(error => console.log(error));
 }
-const next_url = () => {
-  API = promesa;
+const next_url = async() => {
+  API = await nextPage;
   //return API;
 }
 const loadData = () => {
-  let nextPage;
-  let verificator;
   promesa = new Promise( function(resolve, reject) {
     nextPage = localStorage.getItem('next_fetch');
     resolve(nextPage);
   });
-  promesa.then(
+  promesa
+  .then(
     verificator => console.log(verificator ? verificator : API)   
   )
+
+  next_url();
   getData(API);
   //const next_url()=;
 
