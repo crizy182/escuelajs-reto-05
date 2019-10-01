@@ -1,8 +1,7 @@
 const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
-let next;
+let dataStorage;
 let API = 'https://rickandmortyapi.com/api/character/';
-localStorage.setItem('myCat', 'Tom');
 
 const getData = api => {
   fetch(api)
@@ -11,7 +10,6 @@ const getData = api => {
       const characters = response.results;
       next = response.info.next;
       localStorage.setItem('next_fetch', next);
-      console.log(next);
       let output = characters.map(character => {
         return `
       <article class="Card">
@@ -28,11 +26,19 @@ const getData = api => {
     .catch(error => console.log(error));
 }
 const next_url = () => {
-  API = next;
+  API = dataStorage;
   //return API;
 }
-const loadData = async () => {
-  // let dataStorage = next_fetch();
+const loadData = () => {
+  let nextPage;
+  let verificator;
+  dataStorage = new Promise( function(resolve, reject) {
+    nextPage = localStorage.getItem('next_fetch');
+    resolve(nextPage);
+  });
+  dataStorage.then(
+    verificator => console.log(verificator ? verificator : API)   
+  )
   getData(API);
   //const next_url()=;
 
