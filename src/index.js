@@ -1,16 +1,22 @@
 const $app = document.getElementById('app');
 const $observe = document.getElementById('observe');
+let promesa;
+let nextPage;
 let API = 'https://rickandmortyapi.com/api/character/';
-let API2 = 'https://us-central1-escuelajs-api.cloudfunctions.net/characters'
-let next;
-const getData = api => {
+window.onload = localStorage.clear();
+
+const getData = async api => {
   fetch(api)
     .then(response => {response.json()
     })
     .then(response => {
       const characters = response.results;
       next = response.info.next;
-      console.log(next);
+      if (next == ""){
+        alert('Dude ya no hay más personajes deja de stalkear');
+        intersectionObserver.unobserve($observe);
+      }
+      localStorage.setItem('next_fetch', next);
       let output = characters.map(character => {
         return `
       <article class="Card">
@@ -23,18 +29,22 @@ const getData = api => {
       newItem.classList.add('Items');
       newItem.innerHTML = output;
       $app.appendChild(newItem);
-    })
-    .catch(error => console.log(error));
+    }).then(next_url())
+    .catch(error => console.log(error,'It works, but there is a flick error but I don\'t where is it'));
 }
-
-const next_fetch = () => {
-  API = next;
-  // console.log(next);
+const next_url = async() => {
+  API = await nextPage;
+  return API;
 }
-
-const loadData = () => {
+const loadData = async () => {
+  if (localStorage.getItem('next_fetch')!==''){
+    const apiUrl = localStorage.getItem('next_fetch')!== null ? localStorage.getItem('next_fetch') : API;
+    const response = await getData(apiUrl);
+  }
+  next_url();
   getData(API);
-  nextPage();
+  //const next_url()=;
+
 }
 
 const intersectionObserver = new IntersectionObserver(entries => {
@@ -42,7 +52,7 @@ const intersectionObserver = new IntersectionObserver(entries => {
     loadData();
   }
 }, {
-  rootMargin: '0px 0px 100% 0px',
+  rootMargin: '0px 0px 95% 0px',
 });
 
 intersectionObserver.observe($observe);
