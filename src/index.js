@@ -3,8 +3,9 @@ const $observe = document.getElementById('observe');
 let promesa;
 let nextPage;
 let API = 'https://rickandmortyapi.com/api/character/';
+window.onload = localStorage.clear();
 
-const getData = api => {
+const getData = async api => {
   fetch(api)
     .then(response => response.json())
     .then(response => {
@@ -28,18 +29,13 @@ const getData = api => {
 }
 const next_url = async() => {
   API = await nextPage;
-  //return API;
+  return API;
 }
-const loadData = () => {
-  promesa = new Promise( function(resolve, reject) {
-    nextPage = localStorage.getItem('next_fetch');
-    resolve(nextPage);
-  });
-  promesa
-  .then(
-    verificator => console.log(verificator ? verificator : API)   
-  )
-
+const loadData = async () => {
+  if (localStorage.getItem('next_fetch')!==''){
+    const apiUrl = localStorage.getItem('next_fetch')!== null ? localStorage.getItem('next_fetch') : API;
+    const response = await getData(apiUrl);
+  }
   next_url();
   getData(API);
   //const next_url()=;
