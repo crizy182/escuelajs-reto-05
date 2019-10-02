@@ -7,8 +7,7 @@ window.onload = localStorage.clear();
 
 const getData = async api => {
   fetch(api)
-    .then(response => {response.json()
-    })
+    .then(response => response.json())
     .then(response => {
       const characters = response.results;
       next = response.info.next;
