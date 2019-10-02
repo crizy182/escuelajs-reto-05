@@ -11,6 +11,10 @@ const getData = async api => {
     .then(response => {
       const characters = response.results;
       next = response.info.next;
+      if (next == ""){
+        alert('Dude ya no hay más personajes deja de stalkear');
+        intersectionObserver.unobserve($observe);
+      }
       localStorage.setItem('next_fetch', next);
       let output = characters.map(character => {
         return `
@@ -25,7 +29,7 @@ const getData = async api => {
       newItem.innerHTML = output;
       $app.appendChild(newItem);
     }).then(next_url())
-    .catch(error => console.log(error));
+    .catch(error => console.log(error,'It works, but there is a flick error but I don\'t where is it'));
 }
 const next_url = async() => {
   API = await nextPage;
